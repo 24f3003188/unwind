@@ -1,20 +1,23 @@
 <template>
   <div class="write-editor">
-    <textarea
-      ref="textareaRef"
-      class="editor-textarea handwritten"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      :placeholder="readonly ? '' : 'Start writing whenever you\'re ready...'"
-      :readonly="readonly"
-      autofocus
-    ></textarea>
+    <!-- 
+      The space added to modelValue is a crucial part of the CSS grid auto-grow trick. 
+      It prevents trailing newlines from collapsing the height.
+    -->
+    <div class="grow-wrap" :data-replicated-value="modelValue + ' '">
+      <textarea
+        class="editor-textarea handwritten"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
+        :placeholder="readonly ? '' : 'Start writing whenever you\'re ready...'"
+        :readonly="readonly"
+        autofocus
+      ></textarea>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
-
 const props = defineProps({
   modelValue: {
     type: String,
@@ -27,17 +30,6 @@ const props = defineProps({
 })
 
 defineEmits(['update:modelValue'])
-
-const textareaRef = ref(null)
-
-// Auto-grow textarea
-watch(() => props.modelValue, async () => {
-  await nextTick()
-  if (textareaRef.value) {
-    textareaRef.value.style.height = 'auto'
-    textareaRef.value.style.height = textareaRef.value.scrollHeight + 'px'
-  }
-})
 </script>
 
 <style scoped>
@@ -47,14 +39,39 @@ watch(() => props.modelValue, async () => {
   padding: 0 var(--space-xl);
 }
 
-.editor-textarea {
+.grow-wrap {
+  display: grid;
   width: 100%;
+}
+
+.grow-wrap::after {
+  /* This hidden element forces the grid to expand, giving the textarea a 100% height to follow */
+  content: attr(data-replicated-value);
+  white-space: pre-wrap;
+  visibility: hidden;
+  grid-area: 1 / 1 / 2 / 2;
+  
+  /* MUST EXACTLY MATCH THE TEXTAREA TYPOGRAPHY TO GROW CORRECTLY */
+  font-family: var(--font-handwritten);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.editor-textarea {
+  grid-area: 1 / 1 / 2 / 2;
+  width: 100%;
+  height: 100%;
   min-height: 40px;
   border: none;
   background: transparent;
   outline: none;
   color: var(--ink);
-  line-height: 1.7;
   padding: 0;
   text-align: center;
   resize: none;
@@ -80,7 +97,8 @@ watch(() => props.modelValue, async () => {
     padding: 0 var(--space-lg);
   }
 
-  .editor-textarea.handwritten {
+  .editor-textarea.handwritten,
+  .grow-wrap::after {
     font-size: 14px;
   }
 }
