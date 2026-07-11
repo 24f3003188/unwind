@@ -4,7 +4,7 @@
       <div class="footer-left">
         <div class="logo">unwind</div>
         <p class="made-by">Made with ❤️ by Atharv</p>
-        <p class="copyright">© {{ new Date().getFullYear() }} Unwind. All rights reserved.</p>
+        <p class="copyright">© {{ new Date().getFullYear() }} Unwind</p>
       </div>
       
       <div class="footer-right">

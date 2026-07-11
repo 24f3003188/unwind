@@ -18,9 +18,9 @@ const routes = [
     component: () => import('../views/WritePage.vue'),
   },
   {
-    path: '/release',
-    name: 'release',
-    component: () => import('../views/ReleasePage.vue'),
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../views/NotFoundPage.vue'),
   },
 ]
 
@@ -33,7 +33,7 @@ const router = createRouter({
 })
 
 // Music flow pages — music is allowed to keep playing across these
-const musicPages = new Set(['write', 'release'])
+const musicPages = new Set(['write'])
 
 router.beforeEach((to, from) => {
   // If leaving a music page and NOT going to another music page → kill audio
