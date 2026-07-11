@@ -286,14 +286,14 @@ onBeforeUnmount(() => {
   gap: var(--space-md);
   width: 100%;
   max-width: 680px;
-  padding-bottom: 120px; /* Space for the fixed button */
+  padding-bottom: 160px; /* Space for the fixed button */
   min-height: 50vh;
   justify-content: center;
 }
 
 .release-action-panel, .final-action-panel {
   position: fixed;
-  bottom: 60px;
+  bottom: 100px;
   left: 0;
   right: 0;
   display: flex;
