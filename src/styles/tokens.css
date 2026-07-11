@@ -1,0 +1,81 @@
+/* ============================================
+   UNWIND — Design Tokens (Clay Design System)
+   ============================================ */
+
+:root {
+  /* === Canvas & Surfaces === */
+  --canvas: #141414;
+  --surface-soft: #1F1F1F;
+  --surface-card: #1F1F1F;
+  --surface-strong: #2D2D2D;
+  --surface-dark: #141414;
+  --surface-dark-elevated: #2D2D2D;
+  --hairline: rgba(255, 255, 255, 0.2);
+
+  /* === Brand Colors === */
+  --brand-netflix: #E50914;
+  --brand-netflix-dark: #831010;
+  --brand-netflix-muted: #B20710;
+  
+  --brand-peach: #E50914; /* Mapped to red for backwards compatibility */
+  --brand-teal: #141414;
+  --brand-lavender: #E50914;
+  --brand-ochre: #E50914;
+  --brand-mint: #E50914;
+  --brand-coral: #E50914;
+
+  /* === Mood Colors (mapped to brand) === */
+  --mood-heavy: var(--brand-netflix);
+  --mood-anxious: var(--brand-netflix);
+  --mood-melancholic: var(--brand-netflix);
+  --mood-overwhelmed: var(--brand-netflix);
+
+  /* === Text Colors === */
+  --ink: #FFFFFF;
+  --body-strong: #FFFFFF;
+  --body: #BCBCBC;
+  --muted: #808080;
+  --muted-soft: #6D6D6E;
+  --on-primary: #141414;
+
+  /* === Semantic === */
+  --success: #46D369; /* Match score green */
+  --warning: #f59e0b;
+  --error: #E50914;
+
+  /* === Typography === */
+  --font-display: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-handwritten: 'Shadows Into Light', 'Caveat', cursive;
+
+  /* === Spacing (Netflix density scale) === */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-section: 64px;
+
+  /* === Border Radius === */
+  --rounded-xs: 2px;
+  --rounded-sm: 4px;
+  --rounded-md: 6px;
+  --rounded-lg: 8px;
+  --rounded-xl: 12px;
+  --rounded-pill: 9999px;
+  --rounded-full: 50%;
+
+  /* === Layout === */
+  --max-content: 100%; /* Edge to edge for Netflix style */
+  --nav-height: 68px;
+
+  /* === Transitions === */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-cinematic: 1500ms;
+}

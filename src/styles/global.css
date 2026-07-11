@@ -1,0 +1,106 @@
+/* ============================================
+   UNWIND — Global Styles
+   ============================================ */
+
+@import './tokens.css';
+@import './reset.css';
+@import './typography.css';
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--body);
+  background-color: var(--canvas);
+  transition: background-color var(--duration-cinematic) var(--ease-in-out);
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Selection === */
+::selection {
+  background-color: var(--brand-netflix);
+  color: #ffffff;
+}
+
+/* === Scrollbar (subtle Netflix style) === */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--canvas);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: var(--rounded-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* === Content Container === */
+.container {
+  width: 100%;
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 0 4%; /* Netflix style fluid padding */
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 4%;
+  }
+}
+
+/* === Page Transitions === */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.6s ease-in-out;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+/* === Fade Up Transition === */
+.fade-up-enter-active {
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.fade-up-leave-active {
+  transition: opacity var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
+}
+
+.fade-up-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* === Utility: visually hidden === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

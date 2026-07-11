@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Three.js Text Explosion</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+    #three-container {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    /* Hide the codepen default cursor instructions */
+    #instructions {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="three-container"></div>
+  
+  <!-- Load old Three.js, GSAP 1.18, THREE.BAS, and PNLTRI -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/bas.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jahting/pnltri.js@master/build/pnltri.min.js"></script>
+
+  <!-- Load the user's provided codepen code -->
+  <script src="codepen.js"></script>
+
+  <script>
+    // Communication with Vue parent window
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'SET_TEXT') {
+        // The codepen.js code uses window.location.href.split('#')[1]
+        // So setting hash and reloading is the easiest way to inject text without rewriting their code
+        if (window.location.hash !== '#' + event.data.text) {
+          window.location.hash = event.data.text;
+          window.location.reload();
+        }
+      }
+    });
+
+    // Notify parent on scroll completion?
+    // We can observe the timeline max progress.
+    // However, the scrubber is bound to drag/touch in their code!
+    // Wait, the user said "what if we do this when user let go , on scroll if possible"
+    // So if the user wants scroll, we need to bind the window scroll to the tween.
+    // In their codepen, it uses drag `createTweenScrubber`. Let's just bind scroll to the same tween in codepen.js or here.
+  </script>
+</body>
+</html>

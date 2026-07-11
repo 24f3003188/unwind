@@ -1,0 +1,170 @@
+/* ============================================
+   UNWIND — Typography
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@font-face {
+  font-family: 'Sackers Gothic';
+  src: url('/fonts/sackers-gothic-medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* === Font Families === */
+:root {
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-handwritten: 'Sackers Gothic', cursive;
+  --font-cinematic: 'Sackers Gothic', sans-serif;
+}
+
+/* === Display Headings (Outfit 500, negative tracking) === */
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 72px;
+  line-height: 1.0;
+  letter-spacing: -2.5px;
+  color: var(--ink);
+}
+
+.display-lg {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: var(--ink);
+}
+
+.display-md {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--ink);
+}
+
+.display-sm {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+
+/* === Titles (Inter 600) === */
+.title-lg {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+
+.title-md {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.title-sm {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* === Body (Inter 400) === */
+.body-md {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
+.body-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
+/* === Caption === */
+.caption {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.caption-uppercase {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* === Song Reveal (Sackers Gothic, cinematic) === */
+.song-title-text {
+  font-family: var(--font-cinematic);
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.song-artist-text {
+  font-family: var(--font-cinematic);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  line-height: 1.4;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+/* === Responsive Typography === */
+@media (max-width: 768px) {
+  .display-xl {
+    font-size: 40px;
+    letter-spacing: -1.5px;
+  }
+
+  .display-lg {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+
+  .display-md {
+    font-size: 28px;
+    letter-spacing: -0.5px;
+  }
+
+  .display-sm {
+    font-size: 24px;
+    letter-spacing: -0.3px;
+  }
+
+  .song-title-text {
+    font-size: 18px;
+  }
+
+  .song-artist-text {
+    font-size: 10px;
+  }
+}
