@@ -12,6 +12,17 @@
       @complete="onRevealComplete"
     />
 
+    <!-- Back Button -->
+    <transition name="fade-up">
+      <button 
+        v-if="showEditor && !isReleasing" 
+        class="back-nav-btn"
+        @click="goBackToCatalog"
+      >
+        <span class="arrow">←</span> Back
+      </button>
+    </transition>
+
     <!-- Writing area (appears after reveal) -->
     <transition name="fade-up">
       <div v-if="showEditor" class="write-content">
@@ -197,6 +208,12 @@ function goHome() {
   router.push('/')
 }
 
+function goBackToCatalog() {
+  // Keeps the session state if they want, or clears it. 
+  // Let's just go back to the catalog.
+  router.push('/browse')
+}
+
 // Sync text to store on changes
 onBeforeUnmount(() => {
   if (!isReleasing.value) {
@@ -217,6 +234,7 @@ onBeforeUnmount(() => {
   background-color: var(--canvas);
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
 .write-page::before {
@@ -228,6 +246,37 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
+.back-nav-btn {
+  position: fixed;
+  top: var(--space-lg);
+  left: var(--space-xl);
+  z-index: 20;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.back-nav-btn:hover {
+  color: #ffffff;
+}
+
+.arrow {
+  font-size: 18px;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.back-nav-btn:hover .arrow {
+  transform: translateX(-4px);
+}
+
 .write-content {
   position: relative;
   z-index: 2;
@@ -237,19 +286,24 @@ onBeforeUnmount(() => {
   gap: var(--space-md);
   width: 100%;
   max-width: 680px;
+  padding-bottom: 120px; /* Space for the fixed button */
+  min-height: 50vh;
+  justify-content: center;
 }
 
 .release-action-panel, .final-action-panel {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  right: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: var(--space-md);
   width: 100%;
-}
-
-.final-action-panel {
-  margin-top: var(--space-lg);
+  z-index: 10;
+  padding: 0 var(--space-md);
 }
 
 .release-btn {
@@ -278,6 +332,11 @@ onBeforeUnmount(() => {
   .write-page {
     padding: var(--space-lg);
     padding-bottom: 100px;
+  }
+  
+  .back-nav-btn {
+    top: var(--space-md);
+    left: var(--space-md);
   }
 }
 </style>
