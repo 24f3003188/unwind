@@ -54,7 +54,7 @@
     </transition>
 
     <!-- Catalog Row -->
-    <div id="catalog" class="catalog-row container">
+    <div id="catalog" class="catalog-row container" :class="{ 'with-picker': showSongPicker }">
       <h2 class="row-title">Trending Moods</h2>
       <div class="mood-grid">
         <MoodCard
@@ -304,6 +304,11 @@ function startExperience() {
   position: relative;
   z-index: 10;
   margin-top: -8vh;
+  transition: margin-top 0.4s var(--ease-out);
+}
+
+.catalog-row.with-picker {
+  margin-top: 0;
 }
 
 .row-title {
