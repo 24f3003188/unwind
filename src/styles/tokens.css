@@ -47,6 +47,7 @@
   --font-display: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-body: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-handwritten: 'Shadows Into Light', 'Caveat', cursive;
+  --font-cinematic: var(--font-display);
 
   /* === Spacing (Netflix density scale) === */
   --space-xxs: 4px;
@@ -56,6 +57,7 @@
   --space-lg: 24px;
   --space-xl: 32px;
   --space-xxl: 48px;
+  --space-2xl: 48px;
   --space-section: 64px;
 
   /* === Border Radius === */

@@ -3,16 +3,18 @@ export const moods = {
     id: 'heavy',
     label: 'Heavy',
     tagline: 'Like carrying the weight of everything',
-    song: {
-      file: '/music/heavy.mp3',
-      title: 'Field of Dreams',
-      artist: 'Low Roar',
-      album: 'Low Roar',
-    },
-    color: '#e8b94a',       // brand-ochre
-    textOnColor: '#0a0a0a', // dark ink (light background)
+    songs: [
+      { title: 'Field of Dreams', artist: 'Low Roar', file: '/music/heavy.mp3' },
+      { title: 'St Eriksplan', artist: 'Low Roar', file: '/music/heavy-2mp3.mp3' },
+      { title: 'Friends Make Garbage, Good Friends Take It Out', artist: 'Low Roar', file: '/music/heavy3.mp3' },
+    ],
+    // Default song (index 0) for backwards compatibility
+    get song() { return this.songs[0] },
+    color: '#e8b94a',
+    textOnColor: '#0a0a0a',
     cardClass: 'mood-heavy',
-    bgImage: '/img/heavy.jpg',
+    bgImages: ['/img/heavy.jpg', '/img/heavy2.jpg', '/img/heavy3.jpg'],
+    get bgImage() { return this.bgImages[0] },
     responses: [
       "It is okay to put the burden down for a while. You don't have to carry it all right now.",
       "The weight you feel is real, but it is not permanent. Rest your shoulders.",
@@ -36,16 +38,17 @@ export const moods = {
     id: 'anxious',
     label: 'Anxious',
     tagline: 'Like the ground might give way',
-    song: {
-      file: '/music/anxious.mp3',
-      title: 'Aspirin',
-      artist: 'Low Roar',
-      album: 'Low Roar',
-    },
-    color: '#1a3a3a',       // brand-teal
-    textOnColor: '#ffffff', // white (dark background)
+    songs: [
+      { title: 'Aspirin', artist: 'Low Roar', file: '/music/anxious.mp3' },
+      { title: 'Idiot', artist: 'Low Roar', file: '/music/anxiety-2.mp3' },
+      { title: 'Give Up', artist: 'Low Roar', file: '/music/anxiety-3.mp3' },
+    ],
+    get song() { return this.songs[0] },
+    color: '#1a3a3a',
+    textOnColor: '#ffffff',
     cardClass: 'mood-anxious',
-    bgImage: '/img/anxious.jpg',
+    bgImages: ['/img/anxious.jpg', '/img/anxious2.jpg', '/img/anxious3.jpg'],
+    get bgImage() { return this.bgImages[0] },
     responses: [
       "The ground is solid beneath you, even when it feels like it's shifting.",
       "You are safe in this exact moment. Let the racing thoughts slow down.",
@@ -69,16 +72,17 @@ export const moods = {
     id: 'melancholic',
     label: 'Melancholic',
     tagline: 'Like the color drained from everything',
-    song: {
-      file: '/music/melancholic.mp3',
-      title: 'Big Parade',
-      artist: 'Low Roar',
-      album: 'Low Roar',
-    },
-    color: '#b8a4ed',       // brand-lavender
-    textOnColor: '#0a0a0a', // dark ink (light background)
+    songs: [
+      { title: 'Big Parade', artist: 'Low Roar', file: '/music/melancholic.mp3' },
+      { title: 'Bergthorugata', artist: 'Low Roar', file: '/music/melancholic-2.mp3' },
+      { title: 'Oh My God', artist: 'Low Roar', file: '/music/melancholic-3.mp3' },
+    ],
+    get song() { return this.songs[0] },
+    color: '#b8a4ed',
+    textOnColor: '#0a0a0a',
     cardClass: 'mood-melancholic',
-    bgImage: '/img/melan.jpg',
+    bgImages: ['/img/melan.jpg', '/img/melan2.jpg', '/img/melan3.jpg'],
+    get bgImage() { return this.bgImages[0] },
     responses: [
       "It is okay to sit in the gray for a while. The color will return when it's ready.",
       "There is a gentle beauty in this stillness. You don't have to force a smile.",
@@ -102,16 +106,17 @@ export const moods = {
     id: 'overwhelmed',
     label: 'Overwhelmed',
     tagline: 'Like drowning in a quiet room',
-    song: {
-      file: '/music/overwelmed.mp3',
-      title: 'Hummingbird',
-      artist: 'Low Roar',
-      album: 'Low Roar',
-    },
-    color: '#ff6b5a',       // brand-coral
-    textOnColor: '#ffffff', // white (dark background)
+    songs: [
+      { title: 'Hummingbird', artist: 'Low Roar', file: '/music/overwelmed.mp3' },
+      { title: 'The Machine', artist: 'Low Roar', file: '/music/overwelemd-2.mp3' },
+      { title: 'Bye Bye', artist: 'Low Roar', file: '/music/overwelemd-3.mp3' },
+    ],
+    get song() { return this.songs[0] },
+    color: '#ff6b5a',
+    textOnColor: '#ffffff',
     cardClass: 'mood-overwhelmed',
-    bgImage: '/img/overwelm.jpg',
+    bgImages: ['/img/overwelm.jpg', '/img/overwelm2.jpg', '/img/overwelm3.jpg'],
+    get bgImage() { return this.bgImages[0] },
     responses: [
       "One thing at a time. One moment at a time. The rest can wait.",
       "You do not have to solve everything today. Just focus on your next breath.",
@@ -169,7 +174,15 @@ export const releaseTypes = {
 }
 
 export function getMood(id) {
-  return moods[id] || null
+  if (!id) return null
+  const [baseId] = id.split('-')
+  return moods[baseId] || null
+}
+
+export function getSongIndexFromId(id) {
+  if (!id) return 0
+  const parts = id.split('-')
+  return parts.length > 1 ? parseInt(parts[1], 10) : 0
 }
 
 export function getReleaseType(id) {

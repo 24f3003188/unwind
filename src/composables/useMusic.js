@@ -10,9 +10,10 @@ const currentSong = ref(null)
 
 let fadeInterval = null
 let timeUpdateHandler = null
+let externalOnEnded = null
 
 export function useMusic() {
-  function load(song) {
+  function load(song, loop = true, onEndedCallback = null) {
     // Clean up previous
     if (audioElement.value) {
       audioElement.value.pause()
@@ -21,10 +22,12 @@ export function useMusic() {
       audioElement.value.removeEventListener('loadedmetadata', onLoaded)
     }
 
+    externalOnEnded = onEndedCallback
+
     currentSong.value = song
     const audio = new Audio(song.file)
     audio.volume = 0 // Start silent for fade-in
-    audio.loop = true
+    audio.loop = loop
     audio.preload = 'auto'
 
     audio.addEventListener('timeupdate', onTimeUpdate)
@@ -42,6 +45,9 @@ export function useMusic() {
 
   function onEnded() {
     isPlaying.value = false
+    if (externalOnEnded) {
+      externalOnEnded()
+    }
   }
 
   function onLoaded() {

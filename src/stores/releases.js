@@ -6,6 +6,7 @@ export const useReleasesStore = defineStore('releases', () => {
   const activeMood = ref(null)
   const activeText = ref('')
   const activeReleaseType = ref(null)
+  const activeSongIndex = ref(0)
 
   // === Release History (persisted to localStorage) ===
   const history = ref(loadHistory())
@@ -44,6 +45,10 @@ export const useReleasesStore = defineStore('releases', () => {
     activeText.value = text
   }
 
+  function setSongIndex(index) {
+    activeSongIndex.value = index
+  }
+
   function setReleaseType(typeId) {
     activeReleaseType.value = typeId
   }
@@ -77,6 +82,7 @@ export const useReleasesStore = defineStore('releases', () => {
     activeMood.value = null
     activeText.value = ''
     activeReleaseType.value = null
+    activeSongIndex.value = 0
   }
 
   // Simple string hash for procedural plant generation
@@ -95,6 +101,7 @@ export const useReleasesStore = defineStore('releases', () => {
     activeMood,
     activeText,
     activeReleaseType,
+    activeSongIndex,
     history,
 
     // Computed
@@ -106,6 +113,7 @@ export const useReleasesStore = defineStore('releases', () => {
     setMood,
     setText,
     setReleaseType,
+    setSongIndex,
     completeRelease,
     resetSession,
   }

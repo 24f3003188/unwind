@@ -1,6 +1,6 @@
 <template>
   <div id="unwind-app">
-    <TopNav v-show="$route.path !== '/write'" />
+    <TopNav v-show="!isCinematicRoute" />
     <main class="router-wrapper">
       <router-view v-slot="{ Component, route }">
         <transition name="page">
@@ -10,23 +10,27 @@
         </transition>
       </router-view>
     </main>
-    <AppFooter v-show="$route.path !== '/write'" />
+    <AppFooter v-show="!isCinematicRoute" />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from './stores/auth'
 import TopNav from './components/layout/TopNav.vue'
 import AppFooter from './components/layout/AppFooter.vue'
 
 const route = useRoute()
+const auth = useAuthStore()
 
-// Hide nav on cinematic pages (write, release)
-const showNav = computed(() => {
-  const hidden = ['write', 'release']
-  return !hidden.includes(route.name)
+onMounted(() => {
+  auth.initializeAuth()
 })
+
+// Hide nav/footer on cinematic, immersive pages
+const cinematicRoutes = ['write', 'replay']
+const isCinematicRoute = computed(() => cinematicRoutes.includes(route.name))
 </script>
 
 <style>

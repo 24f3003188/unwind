@@ -9,7 +9,7 @@
       <h1 class="title">unwind</h1>
       <h2 class="subtitle">A cinematic space to write it down,<br/>and let it go.</h2>
       <p class="description">
-        Choose your mood. Let the music guide you. Write without judgment, and release it into the void.
+        Choose your mood and let the dynamic playlist guide you. Write without judgment. Keep your thoughts forever in your private Memories, or release them into the void.
       </p>
       
       <div class="actions">
@@ -90,7 +90,7 @@ const bgImage = ref('/img/gero.jpg')
 .description {
   font-family: var(--font-body);
   font-size: 20px;
-  color: #bcbcbc;
+  color: #ffffff;
   margin-bottom: var(--space-xl);
   max-width: 600px;
   line-height: 1.5;

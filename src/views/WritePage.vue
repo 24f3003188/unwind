@@ -6,7 +6,7 @@
     <!-- Song Reveal overlay -->
     <SongReveal
       v-if="showReveal"
-      :song="currentMood.song"
+      :song="activeSong"
       text-color="#ffffff"
       :hold-duration="4000"
       @complete="onRevealComplete"
@@ -30,6 +30,9 @@
 
         <transition name="fade-up">
           <div v-if="text.length > 0 && !isReleasing" class="release-action-panel">
+            <button class="release-btn keep-btn" @click="keepForever">
+              Keep it forever
+            </button>
             <button
               class="release-btn"
               :style="releaseBtnStyle"
@@ -52,9 +55,17 @@
 
     <!-- Music Pill -->
     <MusicPill
-      :song="currentMood.song"
+      :song="activeSong"
       :show="showPill"
       :mood-color="currentMood.color"
+    />
+    <!-- Login Prompt -->
+    <LoginPrompt 
+      :visible="showLoginPrompt"
+      title="Keep it forever."
+      body="To save your thoughts, sign in with your Google account. Your words will be waiting for you whenever you want to revisit them."
+      @login="proceedWithLogin"
+      @close="showLoginPrompt = false"
     />
   </div>
 </template>
@@ -63,15 +74,19 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useReleasesStore } from '../stores/releases'
+import { useAuthStore } from '../stores/auth'
+import { supabase } from '../lib/supabase'
 import { getMood } from '../data/moods'
 import { useMusic } from '../composables/useMusic'
 import SongReveal from '../components/write/SongReveal.vue'
 import WriteEditor from '../components/write/WriteEditor.vue'
 import MusicPill from '../components/write/MusicPill.vue'
 import AppButton from '../components/common/AppButton.vue'
+import LoginPrompt from '../components/common/LoginPrompt.vue'
 
 const router = useRouter()
 const store = useReleasesStore()
+const auth = useAuthStore()
 const music = useMusic()
 
 // Redirect if no mood selected
@@ -80,6 +95,8 @@ if (!store.activeMood) {
 }
 
 const currentMood = computed(() => getMood(store.activeMood) || getMood('heavy'))
+const activeSong = computed(() => currentMood.value.songs[store.activeSongIndex] || currentMood.value.song)
+const activeBgImage = computed(() => currentMood.value.bgImages[store.activeSongIndex] || currentMood.value.bgImage)
 
 const text = ref(store.activeText || '')
 
@@ -92,10 +109,11 @@ const isReleasing = ref(false)
 const isComplete = ref(false)
 const bgOpacity = ref(0)
 const randomResponse = ref('')
+const showLoginPrompt = ref(false)
 
 const pageStyle = computed(() => {
   return {
-    backgroundImage: `url(${currentMood.value.bgImage})`,
+    backgroundImage: `url(${activeBgImage.value})`,
     opacity: bgOpacity.value,
     transition: 'opacity 4s ease',
   }
@@ -112,7 +130,7 @@ const releaseBtnStyle = computed(() => {
 // === Cinematic Sequence ===
 onMounted(async () => {
   // Load the song
-  music.load(currentMood.value.song)
+  music.load(activeSong.value, false, playNextSong)
 
   // Start music instantly since they clicked 'Play' on the previous screen
   music.playWithFadeIn(2000)
@@ -128,11 +146,59 @@ onMounted(async () => {
   })
 })
 
+function playNextSong() {
+  const songs = currentMood.value.songs
+  let nextIndex = store.activeSongIndex + 1
+  if (nextIndex >= songs.length) nextIndex = 0
+  
+  store.setSongIndex(nextIndex)
+  
+  // Note: activeSong and activeBgImage are computed and will update automatically
+  music.load(activeSong.value, false, playNextSong)
+  music.playWithFadeIn(2000)
+}
+
 function onRevealComplete() {
   showReveal.value = false
   phase.value = 'write'
   showEditor.value = true
   showPill.value = true
+}
+
+async function keepForever() {
+  if (text.value.trim().length === 0) return
+
+  if (!auth.user) {
+    // Show the login prompt overlay instead of immediately redirecting
+    showLoginPrompt.value = true
+    return
+  }
+
+  // Already logged in, save directly
+  const compoundMoodId = `${store.activeMood}-${store.activeSongIndex}`
+  
+  const { error } = await supabase.from('memories').insert({
+    user_id: auth.user.id,
+    mood_id: compoundMoodId,
+    text_content: text.value
+  })
+
+  if (!error) {
+    store.resetSession()
+    router.push('/memories')
+  } else {
+    console.error('Error saving memory:', error)
+    alert('Failed to save memory.')
+  }
+}
+
+async function proceedWithLogin() {
+  // Save to local storage to process after successful login redirect
+  const compoundMoodId = `${store.activeMood}-${store.activeSongIndex}`
+  localStorage.setItem('pendingMemoryText', text.value)
+  localStorage.setItem('pendingMemoryMood', compoundMoodId)
+  showLoginPrompt.value = false
+  await auth.signInWithGoogle()
 }
 
 function goToRelease() {
@@ -143,12 +209,18 @@ function goToRelease() {
   
   function backspaceNext() {
     if (i > 0) {
-      // Dynamic speed: slow down as it gets closer to the end for a dramatic release feel
-      let currentSpeed = 40;
-      if (i < 20) {
-        currentSpeed = 40 + ((20 - i) * 6); // Slows down to ~150ms for the last character
-      } else if (initialLength > 100) {
-        currentSpeed = 10; // Zoom through long texts
+      // Progress: 0 at start → 1 at end
+      const progress = 1 - (i / initialLength)
+      
+      // Start slow (~120ms), accelerate through the middle, then ease into the final few chars
+      let currentSpeed
+      
+      if (i <= 5) {
+        // Final 5 characters: slow down dramatically for emotional weight
+        currentSpeed = 200 + ((5 - i) * 80)
+      } else {
+        // Exponential acceleration curve: starts at ~120ms, drops to ~8ms
+        currentSpeed = Math.max(8, 120 * Math.pow(1 - progress, 2.5))
       }
 
       text.value = text.value.slice(0, -1)
@@ -237,15 +309,6 @@ onBeforeUnmount(() => {
   background-attachment: fixed;
 }
 
-.write-page::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
-  z-index: 1;
-  pointer-events: none;
-}
-
 .back-nav-btn {
   position: fixed;
   top: var(--space-lg);
@@ -326,6 +389,15 @@ onBeforeUnmount(() => {
 
 .release-btn:active {
   transform: scale(0.97);
+}
+
+.keep-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.keep-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 768px) {
